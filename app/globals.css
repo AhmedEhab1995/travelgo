@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 60 33% 97%;
+    --foreground: 0 0% 0%;
+
+    --card: 60 33% 97%;
+    --card-foreground: 0 0% 0%;
+
+    --popover: 60 33% 97%;
+    --popover-foreground: 0 0% 0%;
+
+    --primary: 39 35% 63%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 0%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 39 35% 90%;
+    --muted-foreground: 0 0% 40%;
+
+    --accent: 39 35% 90%;
+    --accent-foreground: 0 0% 0%;
+
+    --destructive: 0 85% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 39 35% 80%;
+    --input: 39 35% 80%;
+    --ring: 39 35% 63%;
+
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  @font-face {
+    font-family: "Miller Display";
+    src: url("/fonts/MillerDisplay.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  .font-miller {
+    font-family: "Miller Display", serif;
+  }
+}
+
+.bg-warm-sand {
+  background-color: #c1aa7f;
+}
+
+.text-warm-sand {
+  color: #c1aa7f;
+}
+
+.bg-ivory-white {
+  background-color: #f9f8f3;
+}
+
+.text-ivory-white {
+  color: #f9f8f3;
+}
