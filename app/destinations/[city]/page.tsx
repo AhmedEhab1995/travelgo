@@ -93,7 +93,7 @@ const tripsByCity: Record<
     },
     {
       id: 3,
-      title: "Dubai Desert Adventure",
+      title: "Dubai Adventure",
       description: "Experience dune bashing and desert camping.",
       days: 3,
       price: 1000,

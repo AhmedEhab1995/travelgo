@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useSearchParams } from "next/navigation"; // Import to read URL parameters
+import { use } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Calendar, Clock, MapPin, Users } from "lucide-react";
@@ -84,13 +85,194 @@ const generateTripDetails = (
   ];
   const tripType = tripTypes[tripId % tripTypes.length];
 
+  function getTripDetailsByTitle(
+    title: string
+  ): { price: number; days: number } | null {
+    for (const city in tripsByCity) {
+      const trips = tripsByCity[city];
+      for (const trip of trips) {
+        if (
+          trip.title.replace(/\s+/g, "").toLowerCase() ===
+          title.replace(/\s+/g, "").toLowerCase()
+        ) {
+          return {
+            price: trip.price,
+            days: trip.days,
+          };
+        }
+      }
+    }
+    return null;
+  }
+
+  const tripsByCity: Record<
+    string,
+    {
+      id: number;
+      title: string;
+      description: string;
+      days: number;
+      price: number;
+      image: string;
+    }[]
+  > = {
+    Cairo: [
+      {
+        id: 0,
+        title: "Cairo Highlights",
+        description: "Visit the pyramids, the Sphinx, and the Egyptian Museum.",
+        days: 4,
+        price: 800,
+        image: "/images/Cairo-Highlights.png?height=400&width=600",
+      },
+      {
+        id: 1,
+        title: "Cairo Cultural Tour",
+        description: "Explore Islamic Cairo and Khan El Khalili bazaar.",
+        days: 3,
+        price: 600,
+        image: "/images/Cairo-Cultural-Tour.png?height=400&width=600",
+      },
+    ],
+    Dubai: [
+      {
+        id: 2,
+        title: "Dubai Luxury Experience",
+        description:
+          "Stay at the finest hotels and experience luxury shopping.",
+        days: 5,
+        price: 2000,
+        image: "/images/Dubai-Luxury-Experience.png?height=400&width=600",
+      },
+      {
+        id: 3,
+        title: "Dubai Adventure",
+        description: "Experience dune bashing and desert camping.",
+        days: 3,
+        price: 1000,
+        image: "/images/Dubai-Desert-Adventure.png?height=400&width=600",
+      },
+      {
+        id: 4,
+        title: "Dubai Food Tour",
+        description: "Discover Dubai's diverse culinary scene.",
+        days: 2,
+        price: 700,
+        image: "/images/Dubai-Food-Tour.png?height=400&width=600",
+      },
+    ],
+    Doha: [
+      {
+        id: 5,
+        title: "Doha Skyline Tour",
+        description: "Marvel at the modern architecture of West Bay.",
+        days: 2,
+        price: 500,
+        image: "/images/Doha-Skyline-Tour.png?height=400&width=600",
+      },
+      {
+        id: 6,
+        title: "Doha Souq Waqif Experience",
+        description: "Explore the vibrant traditional markets.",
+        days: 3,
+        price: 650,
+        image: "/images/Doha-Souq-Waqif-Experience.png?height=400&width=600",
+      },
+    ],
+    Riyadh: [
+      {
+        id: 7,
+        title: "Riyadh Modernization Tour",
+        description: "Discover Riyadh’s new cultural and entertainment venues.",
+        days: 3,
+        price: 800,
+        image: "/images/Riyadh-Modernization-Tour.png?height=400&width=600",
+      },
+      {
+        id: 8,
+        title: "Riyadh Historical",
+        description: "Visit Diriyah and old forts.",
+        days: 2,
+        price: 550,
+        image: "/images/Historical-Riyadh.png?height=400&width=600",
+      },
+    ],
+    Muscat: [
+      {
+        id: 8,
+        title: "Muscat Historical",
+        description:
+          "Experience Muscat's natural beauty and traditional souqs.",
+        days: 3,
+        price: 700,
+        image: "/images/Muscat-Essentials.png?height=400&width=600",
+      },
+    ],
+    Amman: [
+      {
+        id: 9,
+        title: "Amman Ancient Sites Tour",
+        description: "Visit the Citadel, Roman Theater, and Rainbow Street.",
+        days: 3,
+        price: 600,
+        image: "/images/Amman-Ancient-Sites-Tour.png?height=400&width=600",
+      },
+      {
+        id: 10,
+        title: "Amman & Dead Sea Adventure",
+        description: "Day trip to the Dead Sea and surrounding areas.",
+        days: 2,
+        price: 500,
+        image: "/images/Amman-and-Dead-Sea-Adventure.png?height=400&width=600",
+      },
+    ],
+    Beirut: [
+      {
+        id: 11,
+        title: "Beirut Nightlife Tour",
+        description: "Experience the lively clubs and bars of Beirut.",
+        days: 2,
+        price: 750,
+        image: "/images/Beirut-Nightlife-Tour.png?height=400&width=600",
+      },
+      {
+        id: 12,
+        title: "Beirut Historical Walk",
+        description: "Explore downtown Beirut's historical sites.",
+        days: 3,
+        price: 650,
+        image: "/images/Historical-Beirut-Walk.png?height=400&width=600",
+      },
+    ],
+    Petra: [
+      {
+        id: 13,
+        title: "Petra Discovery",
+        description: "Explore the ancient rose city.",
+        days: 2,
+        price: 700,
+        image: "/images/Petra-Discovery.png?height=400&width=600",
+      },
+      {
+        id: 14,
+        title: "Petra & Wadi Rum",
+        description: "Combine Petra with a desert adventure in Wadi Rum.",
+        days: 3,
+        price: 1000,
+        image: "/images/Petra-and-Wadi-Rum.png?height=400&width=600",
+      },
+    ],
+  };
+
+  const title = `${cityName} ${tripType}`;
+  const tripData = getTripDetailsByTitle(title);
   return {
     id: tripId,
     title: `${cityName} ${tripType}`,
     description: `Experience the best of ${cityName} with our guided ${tripType.toLowerCase()} package.`,
     longDescription: `Immerse yourself in the wonders of ${cityName} with our exclusive ${tripType.toLowerCase()} package. This carefully crafted journey takes you through the most iconic landmarks and hidden gems of the region, providing an authentic and unforgettable experience. Our expert guides will share fascinating insights about the local culture, history, and traditions, making this trip both educational and entertaining.`,
-    days: Math.floor(Math.random() * 5) + 3,
-    price: Math.floor(Math.random() * 1500) + 500,
+    days: tripData?.days ?? Math.floor(Math.random() * 5) + 3,
+    price: tripData?.price ?? Math.floor(Math.random() * 1500) + 500,
     image: `${imageFromURL}&text=${cityName} ${tripType}`,
     gallery: Array(4)
       .fill(null)
@@ -138,10 +320,18 @@ const generateTripDetails = (
       "Optional activities not mentioned in the itinerary",
       "Gratuities for guides and drivers",
     ],
-    maxGroupSize: Math.floor(Math.random() * 10) + 6,
+    maxGroupSize: getMaxGroupSize(cityName.length),
   };
 };
 
+function getMaxGroupSize(days: number) {
+  // This will always return a number between 6 and 15 (10 total values)
+  return Math.floor(seededRandom(days) * 10) + 6;
+}
+function seededRandom(seed: number) {
+  const x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
+}
 interface TripDetailsPageProps {
   params: {
     city: string;
@@ -149,12 +339,16 @@ interface TripDetailsPageProps {
   };
 }
 
-export default function TripDetailsPage({ params }: TripDetailsPageProps) {
-  const cityName = params.city.charAt(0).toUpperCase() + params.city.slice(1);
-  const tripId = Number.parseInt(params.id);
-
+export default function TripDetailsPage({
+  params,
+}: {
+  params: Promise<{ city: string; id: string }>;
+}) {
+  const { city: otherCity, id } = use(params);
+  const cityName = otherCity.charAt(0).toUpperCase() + otherCity.slice(1);
+  const tripId = Number.parseInt(id);
   const city = cities.find(
-    (c) => c.name.toLowerCase() === params.city.toLowerCase()
+    (c) => c.name.toLowerCase() === otherCity.toLowerCase()
   );
 
   if (!city || isNaN(tripId)) {
@@ -180,14 +374,14 @@ export default function TripDetailsPage({ params }: TripDetailsPageProps) {
       <Breadcrumb
         items={[
           { label: "Destinations", href: "/destinations" },
-          { label: city.name, href: `/destinations/${params.city}` },
+          { label: city.name, href: `/destinations/${otherCity}` },
           { label: trip.title },
         ]}
       />
 
       <div className="mb-12">
         <Link
-          href={`/destinations/${params.city}`}
+          href={`/destinations/${otherCity}`}
           className="text-warm-sand hover:underline mb-4 inline-block"
         >
           ← Back to {city.name} Tours
@@ -396,7 +590,7 @@ export default function TripDetailsPage({ params }: TripDetailsPageProps) {
             variant="outline"
             className="border-warm-sand text-warm-sand hover:bg-warm-sand hover:text-white py-6 px-8 text-lg"
           >
-            <Link href={`/destinations/${params.city}`}>
+            <Link href={`/destinations/${otherCity}`}>
               {" "}
               View Similar Tours{" "}
             </Link>

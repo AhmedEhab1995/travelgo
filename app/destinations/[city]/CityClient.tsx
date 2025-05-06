@@ -280,7 +280,6 @@ export default function CityClient({
                           <span>{trip.days} days</span>
                         </div>
                         <div className="flex items-center text-warm-sand">
-                          <DollarSign className="h-4 w-4 mr-1" />
                           <span>${trip.price}</span>
                         </div>
                       </div>
