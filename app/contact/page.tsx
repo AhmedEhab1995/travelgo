@@ -1,13 +1,14 @@
 "use client";
 
-import type React from "react";
-
 import { useState } from "react";
-import { Mail, MapPin, Phone } from "lucide-react";
+import { CheckCircle, Loader2 } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Mail, MapPin, Phone } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
+import Breadcrumb from "@/components/breadcrumb";
 import {
   Select,
   SelectContent,
@@ -15,31 +16,63 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import Breadcrumb from "@/components/breadcrumb";
-
 export default function ContactPage() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+
+  const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
+    setIsLoading(true);
+    setError("");
+    setIsSuccess(false);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      const response = await fetch("/api/send-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-    setIsSubmitting(false);
-    setIsSuccess(true);
+      if (response.ok) {
+        setIsSuccess(true);
+        setFormData({ name: "", email: "", message: "" });
+      } else {
+        const data = await response.json();
+        setError(data.error || "Something went wrong.");
+      }
+    } catch (err) {
+      setError("Failed to submit. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="container py-16">
+    <section className=" container py-16 lg:py-20 xl:py-24">
       <Breadcrumb items={[{ label: "Contact Us" }]} />
 
       <h1 className="text-4xl font-bold mb-8 text-center">Contact Us</h1>
 
       <div className="max-w-3xl mx-auto mb-12 text-center">
-        <p className="text-lg text-gray-600">
+        <p className="mt-6 text-base leading-relaxed text-muted-foreground">
           Have questions about our tours or need assistance planning your trip?
           Our travel experts are here to help you create the perfect Middle East
           experience.
@@ -86,101 +119,72 @@ export default function ContactPage() {
           <p className="text-warm-sand">Cairo, Egypt</p>
         </div>
       </div>
-
-      <div className="max-w-3xl mx-auto">
-        <div className="bg-ivory-white p-8 rounded-lg">
-          <h2 className="text-2xl font-bold mb-6 text-center">
-            Send Us a Message
-          </h2>
-
-          {isSuccess ? (
-            <div className="text-center py-8">
-              <div className="w-16 h-16 bg-warm-sand rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="text-white"
-                >
-                  <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold mb-2">
-                Message Sent Successfully!
-              </h3>
-              <p className="text-gray-600 mb-6">
-                Thank you for contacting us. One of our travel experts will get
-                back to you shortly.
-              </p>
-              <Button
-                onClick={() => setIsSuccess(false)}
-                className="bg-warm-sand hover:bg-warm-sand/90"
-              >
-                Send Another Message
-              </Button>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label htmlFor="firstName">First Name</Label>
-                  <Input id="firstName" required />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="lastName">Last Name</Label>
-                  <Input id="lastName" required />
-                </div>
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" required />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="phone">Phone</Label>
-                  <Input id="phone" type="tel" />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="subject">Subject</Label>
-                <Select>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a subject" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="general">General Inquiry</SelectItem>
-                    <SelectItem value="booking">Booking Information</SelectItem>
-                    <SelectItem value="custom">Custom Tour Request</SelectItem>
-                    <SelectItem value="feedback">Feedback</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="message">Message</Label>
-                <Textarea id="message" rows={5} required />
-              </div>
-
-              <Button
-                type="submit"
-                className="w-full bg-warm-sand hover:bg-warm-sand/90"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? "Sending..." : "Send Message"}
-              </Button>
-            </form>
-          )}
+      <h2 className="text-2xl font-bold mb-6 text-center">Send Us a Message</h2>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Input
+            name="name"
+            placeholder="Name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+          <Input
+            name="email"
+            type="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
         </div>
-      </div>
-    </div>
+        <div className="space-y-2">
+          <Label htmlFor="subject">Subject</Label>
+          <Select>
+            <SelectTrigger>
+              <SelectValue placeholder="Select a subject" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="general">General Inquiry</SelectItem>
+              <SelectItem value="booking">Booking Information</SelectItem>
+              <SelectItem value="custom">Custom Tour Request</SelectItem>
+              <SelectItem value="feedback">Feedback</SelectItem>
+              <SelectItem value="other">Other</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <Textarea
+          name="message"
+          placeholder="Message"
+          value={formData.message}
+          onChange={handleChange}
+          className="min-h-[150px]"
+          required
+        />
+
+        {error && <p className="text-sm text-red-500">{error}</p>}
+        {isSuccess && (
+          <div className="flex items-center text-green-600 text-sm">
+            <CheckCircle className="w-4 h-4 mr-2" />
+            Your message has been sent successfully!
+          </div>
+        )}
+
+        <Button
+          type="submit"
+          disabled={isLoading}
+          className="w-full bg-warm-sand hover:bg-warm-sand/90"
+        >
+          {isLoading ? (
+            <>
+              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              Sending...
+            </>
+          ) : (
+            "Send Message"
+          )}
+        </Button>
+      </form>
+    </section>
   );
 }
