@@ -122,10 +122,10 @@ export default function Footer() {
               </p>
               <p className="text-sm text-gray-300 mb-2">
                 <a
-                  href="mailto:info@travelgo.com"
+                  href="mailto:info@zenithstravel.com"
                   className="hover:text-warm-sand"
                 >
-                  info@travelgo.com
+                  info@zenithstravel.com
                 </a>
               </p>
             </address>

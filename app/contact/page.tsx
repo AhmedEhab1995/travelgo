@@ -110,10 +110,10 @@ export default function ContactPage() {
           <h3 className="text-xl font-bold mb-2">Email Us</h3>
           <p className="text-gray-600 mb-2">We'll respond within 24 hours</p>
           <a
-            href="mailto:info@travelgo.com"
+            href="mailto:info@zenithstravel.com"
             className="text-warm-sand hover:underline"
           >
-            info@travelgo.com
+            info@zenithstravel.com
           </a>
         </div>
 
