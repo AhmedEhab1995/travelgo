@@ -103,8 +103,8 @@ export default function TestimonialsPage() {
           <p className="text-gray-600">Client Satisfaction</p>
         </div>
         <div className="bg-ivory-white p-6 rounded-lg text-center">
-          <div className="text-4xl font-bold text-warm-sand mb-2">1,200+</div>
-          <p className="text-gray-600">Tours Completed</p>
+          <div className="text-4xl font-bold text-warm-sand mb-2">68%</div>
+          <p className="text-gray-600">Customer Retention Rate</p>
         </div>
         <div className="bg-ivory-white p-6 rounded-lg text-center">
           <div className="text-4xl font-bold text-warm-sand mb-2">4.9/5</div>

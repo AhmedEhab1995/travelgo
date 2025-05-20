@@ -16,12 +16,11 @@ export default function AboutPage() {
         <div>
           <h2 className="text-2xl font-bold mb-4">Our Story</h2>
           <p className="text-gray-600 mb-4">
-            Founded in 2010, Zenith Travel Agency has established itself as the
-            premier luxury travel company specializing in Middle Eastern
-            destinations. Our journey began with a simple vision: to showcase
-            the rich cultural heritage, breathtaking landscapes, and warm
-            hospitality of the Middle East to discerning travelers from around
-            the world.
+            Zenith Travel Agency has established itself as the premier luxury
+            travel company specializing in Middle Eastern destinations. Our
+            journey began with a simple vision: to showcase the rich cultural
+            heritage, breathtaking landscapes, and warm hospitality of the
+            Middle East to discerning travelers from around the world.
           </p>
           <p className="text-gray-600 mb-4">
             What started as a small team of passionate travel enthusiasts has

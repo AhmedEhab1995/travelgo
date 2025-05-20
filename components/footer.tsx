@@ -116,8 +116,8 @@ export default function Footer() {
               </p>
               <p className="text-sm text-gray-300 mb-2">Cairo, Egypt</p>
               <p className="text-sm text-gray-300 mb-2">
-                <a href="tel:+201127219480" className="hover:text-warm-sand">
-                  +2 0112 721 9480
+                <a href="tel:+20237946775" className="hover:text-warm-sand">
+                  +20237946775
                 </a>
               </p>
               <p className="text-sm text-gray-300 mb-2">

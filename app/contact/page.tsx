@@ -95,11 +95,8 @@ export default function ContactPage() {
           </div>
           <h3 className="text-xl font-bold mb-2">Call Us</h3>
           <p className="text-gray-600 mb-2">Mon-Fri from 8am to 5pm</p>
-          <a
-            href="tel:+201127219480"
-            className="text-warm-sand hover:underline"
-          >
-            +2 0112 721 9480
+          <a href="tel:+20237946775" className="text-warm-sand hover:underline">
+            +20237946775
           </a>
         </div>
 

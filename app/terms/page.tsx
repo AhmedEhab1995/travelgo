@@ -111,7 +111,7 @@ export default function TermsPage() {
         <h2>9. Governing Law</h2>
         <p>
           9.1. These terms are governed by Egyptian law and subject to the
-          jurisdiction of Dubai courts.
+          jurisdiction of Egyptian courts.
         </p>
 
         <h2>10. Updates to Terms and Conditions</h2>
